@@ -14,7 +14,22 @@ func TestOne_1(t *testing.T) {
 		name   string
 		input  string
 		expect string
-	}{}
+	}{
+		{
+			name: "example 1",
+			input: `L68
+L30
+R48
+L5
+R60
+L55
+L1
+L99
+R14
+L82`,
+			expect: "3",
+		},
+	}
 
 	for _, tt := range tests {
 		tt := tt
@@ -40,7 +55,22 @@ func TestOne_2(t *testing.T) {
 		name   string
 		input  string
 		expect string
-	}{}
+	}{
+		{
+			name: "example 1",
+			input: `L68
+L30
+R48
+L5
+R60
+L55
+L1
+L99
+R14
+L82`,
+			expect: "6",
+		},
+	}
 
 	for _, tt := range tests {
 		tt := tt
