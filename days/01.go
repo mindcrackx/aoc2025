@@ -21,12 +21,12 @@ func One_1(input io.Reader) (string, error) {
 
 		switch rotaDirection {
 		case 'L':
-			rotation = (rotation - rotaNum + 100) % 100
+			rotation = utils.ModuloSane(rotation-rotaNum, 100)
 		case 'R':
-			rotation = (rotation + rotaNum) % 100
+			rotation = utils.ModuloSane(rotation+rotaNum, 100)
 		}
 
-		// slog.Info("", "rotation", rotation, "line", line, "rotationMod", (rotation+100)%100, "countZeroRotation", countZeroRotation)
+		// slog.Info("", "countZeroRotation", countZeroRotation, "line", line, "rotation", rotation)
 
 		if rotation == 0 {
 			countZeroRotation++
@@ -54,7 +54,7 @@ func One_2(input io.Reader) (string, error) {
 		case 'L':
 			for i := 0; i < rotaNum; i++ {
 				rotation--
-				rotation = (rotation + 100) % 100
+				rotation = utils.ModuloSane(rotation, 100)
 				if rotation == 0 {
 					countZeroRotation++
 				}
@@ -62,7 +62,7 @@ func One_2(input io.Reader) (string, error) {
 		case 'R':
 			for i := 0; i < rotaNum; i++ {
 				rotation++
-				rotation = (rotation + 100) % 100
+				rotation = utils.ModuloSane(rotation, 100)
 				if rotation == 0 {
 					countZeroRotation++
 				}
