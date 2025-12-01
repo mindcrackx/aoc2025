@@ -26,11 +26,12 @@ func One_1(input io.Reader) (string, error) {
 			rotation = utils.ModuloSane(rotation+rotaNum, 100)
 		}
 
-		// slog.Info("", "countZeroRotation", countZeroRotation, "line", line, "rotation", rotation)
-
+		// calculate how often we land on "0"
 		if rotation == 0 {
 			countZeroRotation++
 		}
+
+		// slog.Info("", "countZeroRotation", countZeroRotation, "line", line, "rotation", rotation)
 	}
 	if err := scanner.Err(); err != nil {
 		return "", err
@@ -50,23 +51,20 @@ func One_2(input io.Reader) (string, error) {
 		rotaDirection := line[0]
 		rotaNum := utils.MustAtoi(line[1:])
 
+		// calculate how often we passed "0"
 		switch rotaDirection {
 		case 'L':
-			for i := 0; i < rotaNum; i++ {
-				rotation--
-				rotation = utils.ModuloSane(rotation, 100)
+			if !(rotation > rotaNum) {
 				if rotation == 0 {
-					countZeroRotation++
+					countZeroRotation += rotaNum / 100
+				} else {
+					countZeroRotation += 1 + (rotaNum-rotation)/100
 				}
 			}
+			rotation = utils.ModuloSane(rotation-rotaNum, 100)
 		case 'R':
-			for i := 0; i < rotaNum; i++ {
-				rotation++
-				rotation = utils.ModuloSane(rotation, 100)
-				if rotation == 0 {
-					countZeroRotation++
-				}
-			}
+			countZeroRotation += (rotation + rotaNum) / 100
+			rotation = utils.ModuloSane(rotation+rotaNum, 100)
 		}
 
 		// slog.Info("", "countZeroRotation", countZeroRotation, "line", line, "rotation", rotation)
