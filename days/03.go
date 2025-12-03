@@ -4,8 +4,6 @@ import (
 	"bufio"
 	"fmt"
 	"io"
-
-	"github.com/mindcrackx/aoc2025/utils"
 )
 
 func Three_1(input io.Reader) (string, error) {
@@ -17,7 +15,11 @@ func Three_1(input io.Reader) (string, error) {
 
 		nums := make([]int, 0, len(line))
 		for _, r := range line {
-			nums = append(nums, utils.MustAtoi(string(r)))
+			// optimize to not use utils.MustAtoI(string(r)), saves like 40% execution time
+			// So if r = '5':
+			// - int(r) → 53 (the ASCII code point)
+			// - int(r - '0') → 53 - 48 → 5 (the actual digit)
+			nums = append(nums, int(r-'0'))
 		}
 
 		first := -1
@@ -37,7 +39,7 @@ func Three_1(input io.Reader) (string, error) {
 			}
 			second = tmpSecond
 		}
-		resultTotal += utils.MustAtoi(fmt.Sprintf("%d%d", first, second))
+		resultTotal += first*10 + second
 		// slog.Info("", "resultTotal", resultTotal, "first", first, "second", second)
 	}
 	if err := scanner.Err(); err != nil {
@@ -69,7 +71,11 @@ func Three_2(input io.Reader) (string, error) {
 
 		nums := make([]int, 0, len(line))
 		for _, r := range line {
-			nums = append(nums, utils.MustAtoi(string(r)))
+			// optimize to not use utils.MustAtoI(string(r)), saves like 40% execution time
+			// So if r = '5':
+			// - int(r) → 53 (the ASCII code point)
+			// - int(r - '0') → 53 - 48 → 5 (the actual digit)
+			nums = append(nums, int(r-'0'))
 		}
 
 		bestNums := make([]int, 0, 12)
@@ -82,11 +88,11 @@ func Three_2(input io.Reader) (string, error) {
 			// slog.Info("", "i", i, "currI", currI, "currBest", currBest, "bestNums", bestNums)
 		}
 
-		bestStr := ""
+		var total int
 		for _, n := range bestNums {
-			bestStr += fmt.Sprintf("%d", n)
+			total = total*10 + n
 		}
-		resultTotal += utils.MustAtoi(bestStr)
+		resultTotal += total
 	}
 	if err := scanner.Err(); err != nil {
 		return "", err
