@@ -14,7 +14,22 @@ func TestFour_1(t *testing.T) {
 		name   string
 		input  string
 		expect string
-	}{}
+	}{
+		{
+			name: "example 1",
+			input: `..@@.@@@@.
+@@@.@.@.@@
+@@@@@.@.@@
+@.@@@@..@.
+@@.@@@@.@@
+.@@@@@@@.@
+.@.@.@.@@@
+@.@@@.@@@@
+.@@@@@@@@.
+@.@.@@@.@.`,
+			expect: "13",
+		},
+	}
 
 	for _, tt := range tests {
 		tt := tt
@@ -40,7 +55,22 @@ func TestFour_2(t *testing.T) {
 		name   string
 		input  string
 		expect string
-	}{}
+	}{
+		{
+			name: "example 1",
+			input: `..@@.@@@@.
+@@@.@.@.@@
+@@@@@.@.@@
+@.@@@@..@.
+@@.@@@@.@@
+.@@@@@@@.@
+.@.@.@.@@@
+@.@@@.@@@@
+.@@@@@@@@.
+@.@.@@@.@.`,
+			expect: "43",
+		},
+	}
 
 	for _, tt := range tests {
 		tt := tt
