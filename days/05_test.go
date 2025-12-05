@@ -14,7 +14,23 @@ func TestFive_1(t *testing.T) {
 		name   string
 		input  string
 		expect string
-	}{}
+	}{
+		{
+			name: "example 1",
+			input: `3-5
+10-14
+16-20
+12-18
+
+1
+5
+8
+11
+17
+32`,
+			expect: "3",
+		},
+	}
 
 	for _, tt := range tests {
 		tt := tt
@@ -42,7 +58,23 @@ func TestFive_2(t *testing.T) {
 		name   string
 		input  string
 		expect string
-	}{}
+	}{
+		{
+			name: "example 1",
+			input: `3-5
+10-14
+16-20
+12-18
+
+1
+5
+8
+11
+17
+32`,
+			expect: "14",
+		},
+	}
 
 	for _, tt := range tests {
 		tt := tt
