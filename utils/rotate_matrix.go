@@ -1,17 +1,20 @@
 package utils
 
 func RotateMatrix2DCounterClockwise[T any](matrix [][]T) [][]T {
+	if len(matrix) == 0 || len(matrix[0]) == 0 {
+		return [][]T{}
+	}
+
 	rowLength := len(matrix)
 	colLength := len(matrix[0])
 
-	resultMatrix := make([][]T, 0, colLength)
+	resultMatrix := make([][]T, colLength)
 
 	for i := 0; i < colLength; i++ {
-		tmp := make([]T, 0, rowLength)
+		resultMatrix[i] = make([]T, rowLength)
 		for j := 0; j < rowLength; j++ {
-			tmp = append(tmp, matrix[j][colLength-1-i])
+			resultMatrix[i][j] = matrix[j][colLength-1-i]
 		}
-		resultMatrix = append(resultMatrix, tmp)
 	}
 
 	return resultMatrix

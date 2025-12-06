@@ -88,19 +88,21 @@ func Six_2(input io.Reader) (string, error) {
 		var result int
 		tmpStr := arr[len(arr)-1]
 		op := tmpStr[len(tmpStr)-1]
-		arr[len(arr)-1] = tmpStr[0 : len(tmpStr)-1]
+		lastNum := tmpStr[0 : len(tmpStr)-1] // don't mutate arr
 
-		switch string(op) {
-		case "+":
+		switch op {
+		case '+':
 			result = 0
-			for i := range arr {
+			for i := 0; i < len(arr)-1; i++ {
 				result += utils.MustAtoi(strings.TrimSpace(arr[i]))
 			}
-		case "*":
+			result += utils.MustAtoi(strings.TrimSpace(lastNum))
+		case '*':
 			result = 1
-			for i := range arr {
+			for i := 0; i < len(arr)-1; i++ {
 				result *= utils.MustAtoi(strings.TrimSpace(arr[i]))
 			}
+			result *= utils.MustAtoi(strings.TrimSpace(lastNum))
 		}
 		return result
 	}
@@ -108,12 +110,9 @@ func Six_2(input io.Reader) (string, error) {
 	tmp := make([]string, 0)
 	for _, line := range matrix {
 		s := string(line)
-		if strings.TrimSpace(s) == "" {
-			if len(s) == 0 {
-				continue
-			}
+		if len(s) > 0 && strings.TrimSpace(s) == "" {
 			resultTotal += calculate(tmp)
-			tmp = make([]string, 0)
+			tmp = tmp[:0] // reuse existing slice
 			continue
 		}
 		tmp = append(tmp, s)
