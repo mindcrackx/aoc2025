@@ -14,7 +14,16 @@ func TestSix_1(t *testing.T) {
 		name   string
 		input  string
 		expect string
-	}{}
+	}{
+		{
+			name: "example 1",
+			input: `123 328  51 64 
+ 45 64  387 23 
+  6 98  215 314
+*   +   *   +  `,
+			expect: "4277556",
+		},
+	}
 
 	for _, tt := range tests {
 		tt := tt
@@ -40,7 +49,16 @@ func TestSix_2(t *testing.T) {
 		name   string
 		input  string
 		expect string
-	}{}
+	}{
+		{
+			name: "example 1",
+			input: `123 328  51 64 
+ 45 64  387 23 
+  6 98  215 314
+*   +   *   +  `,
+			expect: "3263827",
+		},
+	}
 
 	for _, tt := range tests {
 		tt := tt
