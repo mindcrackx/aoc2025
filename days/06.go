@@ -62,45 +62,6 @@ func Six_1(input io.Reader) (string, error) {
 	return fmt.Sprintf("%d", resultTotal), nil
 }
 
-/*
-[
-	[1,2,3],
-	[1,2,3],
-	[1,2,3],
-	[1,2,3],
-	[+,*,+],
-]
-
-123 328  51 64
- 45 64  387 23
-  6 98  215 314
-*   +   *   +
-
-
- 46 15  823 321
- 32 783  46 54
-413 512  89 6
-  +   *   +   *
-
-*/
-
-func RotateArray2DLeft[T any](aa [][]T) [][]T {
-	rowLength := len(aa)
-	colLength := len(aa[0])
-
-	bb := make([][]T, 0, colLength)
-
-	for i := 0; i < colLength; i++ {
-		tmp := make([]T, 0, rowLength)
-		for j := 0; j < rowLength; j++ {
-			tmp = append(tmp, aa[j][colLength-1-i])
-		}
-		bb = append(bb, tmp)
-	}
-
-	return bb
-}
-
 func Six_2(input io.Reader) (string, error) {
 	scanner := bufio.NewScanner(input)
 
@@ -121,66 +82,44 @@ func Six_2(input io.Reader) (string, error) {
 		return "", err
 	}
 
-	ss := RotateArray2DLeft(lines)
+	matrix := utils.RotateMatrix2DCounterClockwise(lines)
 
-	var result int
+	calculate := func(arr []string) int {
+		var result int
+		tmpStr := arr[len(arr)-1]
+		op := tmpStr[len(tmpStr)-1]
+		arr[len(arr)-1] = tmpStr[0 : len(tmpStr)-1]
+
+		switch string(op) {
+		case "+":
+			result = 0
+			for i := range arr {
+				result += utils.MustAtoi(strings.TrimSpace(arr[i]))
+			}
+		case "*":
+			result = 1
+			for i := range arr {
+				result *= utils.MustAtoi(strings.TrimSpace(arr[i]))
+			}
+		}
+		return result
+	}
+
 	tmp := make([]string, 0)
-	for _, line := range ss {
+	for _, line := range matrix {
 		s := string(line)
 		if strings.TrimSpace(s) == "" {
 			if len(s) == 0 {
 				continue
 			}
-			// calc
-			tmpStr := tmp[len(tmp)-1]
-			op := tmpStr[len(tmpStr)-1]
-			tmp[len(tmp)-1] = tmpStr[0 : len(tmpStr)-1]
-
-			switch string(op) {
-			case "+":
-				result = 0
-			case "*":
-				result = 1
-			}
-
-			for i := range tmp {
-				switch string(op) {
-				case "+":
-					result += utils.MustAtoi(strings.TrimSpace(tmp[i]))
-				case "*":
-					result *= utils.MustAtoi(strings.TrimSpace(tmp[i]))
-				}
-			}
-
-			resultTotal += result
-			// slog.Info("", "result", result, "tmp", tmp)
+			resultTotal += calculate(tmp)
 			tmp = make([]string, 0)
 			continue
 		}
 		tmp = append(tmp, s)
 	}
 	// last one
-	tmpStr := tmp[len(tmp)-1]
-	op := tmpStr[len(tmpStr)-1]
-	tmp[len(tmp)-1] = tmpStr[0 : len(tmpStr)-1]
-
-	switch string(op) {
-	case "+":
-		result = 0
-	case "*":
-		result = 1
-	}
-
-	for i := range tmp {
-		switch string(op) {
-		case "+":
-			result += utils.MustAtoi(strings.TrimSpace(tmp[i]))
-		case "*":
-			result *= utils.MustAtoi(strings.TrimSpace(tmp[i]))
-		}
-	}
-
-	resultTotal += result
+	resultTotal += calculate(tmp)
 
 	return fmt.Sprintf("%d", resultTotal), nil
 }
