@@ -4,49 +4,41 @@ import (
 	"bufio"
 	"fmt"
 	"io"
-	"slices"
-	"strings"
 )
 
 func Seven_1(input io.Reader) (string, error) {
 	var resultTotal int
 
 	firstLine := true
-	positionsNext := make([]int, 0)
-	positionsNextNext := make([]int, 0)
+	current := make([]int, 0)
+	next := make([]int, 0)
 	scanner := bufio.NewScanner(input)
 	for scanner.Scan() {
 		line := scanner.Text()
-		// fmt.Println(line)
 
-		positionsNext = slices.Clone(positionsNextNext)
-		positionsNextNext = make([]int, 0)
-
-		// first find start
 		if firstLine {
 			firstLine = false
-			positionsNextNext = append(positionsNextNext, strings.Index(line, "S"))
+			current = make([]int, len(line))
+			next = make([]int, len(line))
 		}
+		current, next = next, current
+		clear(next)
 
-		for _, pos := range positionsNext {
-			switch line[pos] {
+		for i, val := range line {
+			switch val {
 			case '.':
-				if !slices.Contains(positionsNextNext, pos) {
-					positionsNextNext = append(positionsNextNext, pos)
-				}
+				next[i] += current[i]
+			case 'S':
+				next[i]++
 			case '^':
-				// counting
-				resultTotal++
-
-				if pos > 0 && !slices.Contains(positionsNextNext, pos-1) {
-					positionsNextNext = append(positionsNextNext, pos-1)
+				if current[i] != 0 {
+					resultTotal++
 				}
-				if pos < len(line)-1 && !slices.Contains(positionsNextNext, pos+1) {
-					positionsNextNext = append(positionsNextNext, pos+1)
-				}
+				next[i-1] += current[i]
+				next[i+1] += current[i]
 			}
 		}
-		// fmt.Println(positionsNext, positionsNextNext)
+		// fmt.Println(line, current, next)
 	}
 	if err := scanner.Err(); err != nil {
 		return "", err
@@ -59,37 +51,38 @@ func Seven_2(input io.Reader) (string, error) {
 	var resultTotal int
 
 	firstLine := true
-	positionsNext := make([]int, 0)
-	positionsNextNext := make([]int, 0)
+	current := make([]int, 0)
+	next := make([]int, 0)
 	scanner := bufio.NewScanner(input)
 	for scanner.Scan() {
 		line := scanner.Text()
 
-		positionsNext = slices.Clone(positionsNextNext)
 		if firstLine {
 			firstLine = false
-			positionsNext = make([]int, len(line))
+			current = make([]int, len(line))
+			next = make([]int, len(line))
 		}
-		positionsNextNext = make([]int, len(line))
+		current, next = next, current
+		clear(next)
 
 		for i, val := range line {
 			switch val {
 			case '.':
-				positionsNextNext[i] += positionsNext[i]
+				next[i] += current[i]
 			case 'S':
-				positionsNextNext[i]++
+				next[i]++
 			case '^':
-				positionsNextNext[i-1] += positionsNext[i]
-				positionsNextNext[i+1] += positionsNext[i]
+				next[i-1] += current[i]
+				next[i+1] += current[i]
 			}
 		}
-		// fmt.Println(line, positionsNext, positionsNextNext)
+		// fmt.Println(line, current, next)
 	}
 	if err := scanner.Err(); err != nil {
 		return "", err
 	}
 
-	for _, result := range positionsNextNext {
+	for _, result := range next {
 		resultTotal += result
 	}
 	return fmt.Sprintf("%d", resultTotal), nil
