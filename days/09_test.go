@@ -14,7 +14,20 @@ func TestNine_1(t *testing.T) {
 		name   string
 		input  string
 		expect string
-	}{}
+	}{
+		{
+			name: "example 1",
+			input: `7,1
+11,1
+11,7
+9,7
+9,5
+2,5
+2,3
+7,3`,
+			expect: "50",
+		},
+	}
 
 	for _, tt := range tests {
 		tt := tt
