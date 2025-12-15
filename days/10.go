@@ -7,6 +7,7 @@ import (
 	"math"
 	"slices"
 	"strings"
+	"sync"
 
 	"github.com/mindcrackx/aoc2025/utils"
 )
@@ -97,8 +98,13 @@ func tenSolveBFS(target []int, buttons [][]int) []int {
 func Ten_2(input io.Reader) (string, error) {
 	var resultTotal int
 
+	sem := make(chan struct{}, 14)
+	var wg sync.WaitGroup
+
 	scanner := bufio.NewScanner(input)
+	lineNum := 0
 	for scanner.Scan() {
+		lineNum++
 		line := scanner.Text()
 
 		idx1 := strings.Index(line, "]")
@@ -122,17 +128,23 @@ func Ten_2(input io.Reader) (string, error) {
 			joltages = append(joltages, utils.MustAtoi(j))
 		}
 
-		fmt.Println("buttons: ", buttons)
-		fmt.Println("joltages:", joltages)
-		result := solveTenPart2(joltages, buttons)
-		resultTotal += result
-		fmt.Printf(" |->  %d\n", result)
-		fmt.Println(strings.Repeat("=", 80))
+		wg.Add(1)
+		go func(ln int) {
+			defer wg.Done()
+			sem <- struct{}{}
+			defer func() { <-sem }()
+
+			result := solveTenPart2(joltages, buttons)
+			resultTotal += result
+			fmt.Printf("ln %d |->  %d\n", ln, result)
+		}(lineNum)
 
 	}
 	if err := scanner.Err(); err != nil {
 		return "", err
 	}
+
+	wg.Wait()
 
 	return fmt.Sprintf("%d", resultTotal), nil
 }
